@@ -1,0 +1,73 @@
+﻿@model News_Site.Models.ViewModel.NewsCategoryViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+
+    var firstNews = Model.NewsList.FirstOrDefault();
+    var otherNews = Model.NewsList.Skip(1).ToList();
+}
+
+<h2 class="text-center mt-4">@Model.Category.CategoryName</h2>
+<hr class="w-100 mx-auto mb-4" />
+
+<div class="row">
+    <div class="col-md-8">
+        @if (firstNews != null)
+        {
+            <a href="/News/Details/@firstNews.Link" class="text-decoration-none text-dark">
+                <div class="card h-25 shadow-sm border-0">
+                    <div class="ratio ratio-16x9">
+                        <img src="@firstNews.Image" alt="@firstNews.NewsTitle"
+                             class="card-img-top rounded-0" style="object-fit: cover; height:500px;"/>
+                    </div>
+                    <div class="card-body px-3 py-3" style="margin-top:-60px;">
+                        <h3 class="card-title fw-semibold">@firstNews.NewsTitle</h3>
+                        <p class="card-text text-muted">@firstNews.MetaDescription</p>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+
+
+    <div class="col-md-4">
+        @foreach (var news in otherNews.Take(5))
+        {
+            <div class="card mb-3 shadow-sm" style="height: 100px;">
+                <div class="d-flex h-100">
+                    <a href="/News/Details/@news.Link" class="flex-shrink-0" style="width: 100px; height: 100px;">
+                        <img src="@news.Image"
+                             class="img-fluid h-100 w-100"
+                             style="object-fit: cover; border-top-left-radius: 0.375rem; border-bottom-left-radius: 0.375rem;" />
+                    </a>
+                    <div class="p-2 d-flex align-items-center">
+                        <a href="/News/Details/@news.Link" class="text-decoration-none text-dark">
+                            <h6 class="mb-0">@news.NewsTitle</h6>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+
+</div>
+
+<hr />
+
+<div class="row mt-4">
+    @foreach (var news in otherNews.Skip(5))
+    {
+        <div class="col-md-3 mb-4">
+            <a href="/News/Details/@news.Link" style="text-decoration:none; color:inherit;">
+                <div class="card h-100">
+                    <img src="@news.Image" class="card-img-top" alt="@news.NewsTitle" style="height: 150px; object-fit: cover;" />
+                    <div class="card-body">
+                        <p class="card-text">@news.NewsTitle</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>

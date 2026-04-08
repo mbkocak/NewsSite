@@ -1,0 +1,98 @@
+﻿@using News_Site.Controllers
+@using News_Site.Models.Entity
+@using News_Site.Models.ViewModel
+@model NewsAndCategoryViewModel
+
+@{
+    ViewData["Title"] = "Add News";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+ <div class="content-wrapper p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title">Add News</h2>
+        <a href="/News/Index" class="btn btn-outline-secondary">
+            <i class="bx bx-arrow-back me-2"></i>Back
+        </a>
+    </div> 
+
+    @using (Html.BeginForm("AddNews", "News", FormMethod.Post, new { enctype = "multipart/form-data", @class = "card p-4" }))
+    {
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="NewsTitle" class="form-label">News Title:</label>
+                @Html.TextBox("NewsTitle", null, new { @class = "form-control newInput", id = "NewsTitle" })
+            </div>
+
+            <div class="col-md-6">
+                <label for="NewsDetail" class="form-label">News Detail:</label>
+                @Html.TextBox("NewsDetail", null, new { @class = "form-control newInput", id = "NewsDetail" })
+            </div>
+
+            <div class="col-md-6">
+                <label for="Image" class="form-label">Image:</label>
+                <input type="file" name="ImageFile" class="form-control newInput" id="Image" />
+            </div>
+
+            <div class="col-md-6">
+                <label for="MetaDescription" class="form-label">Meta Description:</label>
+                @Html.TextBox("MetaDescription", null, new { @class = "form-control newInput", id = "MetaDescription" })
+            </div>
+
+            <div class="col-md-6">
+                <label for="CategoryId" class="form-label">Category Name:</label>
+                <select name="CategoryId" id="CategoryId" class="form-select newInput">
+                    <option value="">Select Category</option>
+                    @foreach (var item in Model.Categories)
+                    {
+                        <option value="@item.CategoryId">@item.CategoryName</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="LoadingDate">Loading Date:</label>
+                @Html.TextBox("LoadingDate", null, new { @class = "form-control newInput", id = "Loading Date" })
+
+            </div>
+        </div>
+
+
+        <div class="row mt-4">
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary newAddBtn">
+                    <i class="bx bx-save me-2"></i>Add News
+                </button>
+            </div>
+        </div>  
+    }
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        @if (TempData["Alert Message"] != null)
+        {
+            <div class="toast show text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>Success!</strong> @TempData["Alert Message"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl, {
+                autohide: true,
+                delay: 5000
+            })
+        })
+        toastList.forEach(toast => toast.show());
+    });
+</script>

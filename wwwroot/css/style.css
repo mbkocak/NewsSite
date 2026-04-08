@@ -1,0 +1,106 @@
+﻿
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins",sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+    color: #333;
+     background-image: url('../images/vector_2650.png'); 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.container {
+    margin:0 15px;
+
+}
+
+.form-box {
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.85); 
+}
+
+.form-box.active {
+    display: block;
+}
+
+ h1 {
+     font-size: 34px;
+     text-align: center;
+     margin-bottom: 20px;
+ }
+
+input {
+    width: 100%;
+    padding: 20px;
+    background: #fff;
+    outline: none !important;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+    border-radius: 30px; 
+    border: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #0043ff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 20px;
+    transition: 0.5s;
+    border-radius:30px; 
+}
+
+ button:hover { 
+ background: #6884d3;
+ } 
+
+p {
+font-size: 14.5px;
+text-align: center;
+margin-bottom: 10px;
+}
+
+p a {
+    color: #0094ff;
+    text-decoration: none;
+
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+.msgbox-success {
+    padding: 10px;
+    margin-top: 20px;
+    color: #00ff90;
+    margin-left:80px;
+
+}
+
+.msgbox-error {
+  
+    margin-top: 10px;
+    color: #ff0000;
+    margin-left: 55px;
+}

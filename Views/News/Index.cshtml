@@ -1,0 +1,172 @@
+﻿@using News_Site.Controllers
+@model IEnumerable<NewsViewModel>
+@using News_Site.Models.ViewModel
+@{
+    ViewData["Title"] = "News";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title">News</h2>
+        <a href="/News/AddNews/" class="btn btn-primary newAddBtn">
+            <i class="bx bx-plus me-2"></i>Add News
+        </a>
+    </div>
+
+    
+    @using (Html.BeginForm("Index", "News", FormMethod.Post, new { @class = "card p-4 mb-4" }))
+    {
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="NewsTitle" class="form-label">News Title:</label>
+                @Html.TextBox("NewsTitle", null, new { @class = "form-control newInput", id = "NewsTitle", placeholder = "Search by title" })
+            </div>
+
+            <div class="col-md-6">
+                <label for="LoadingDate">Loading Date:</label>
+                @Html.TextBox("LoadingDate", null, new { @class = "form-control newInput", id = "LoadingDate", placeholder="Search by loading date" })
+
+            </div>
+
+            <div class="col-md-6">
+                <label for="Link" class="form-label">Link:</label>
+                @Html.TextBox("Link", null, new { @class = "form-control newInput", id = "Link", placeholder = "Search by link" })
+            </div>
+
+            <div class="col-md-6">
+                <label for="MetaDescription" class="form-label">Meta Description:</label>
+                @Html.TextBox("MetaDescription", null, new { @class = "form-control newInput", id = "MetaDescription", placeholder = "Search by meta description" })
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-dark newBtn">
+                    <i class="bx bx-search-alt-2 me-2"></i>Search
+                </button>
+                <button type="button" class="btn btn-dark newBtn" id="clearFiltersBtn">
+                    <i class="bx bx-x me-2"></i>Clear Filters
+                </button>
+            </div>
+        </div>
+    }
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        @if (TempData["DeleteMessage"] != null)
+        {
+            <div class="toast show text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>Success!</strong> @TempData["DeleteMessage"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+        @if (TempData["UpdateMessage"] != null)
+        {
+            <div class="toast show text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>Success!</strong> @TempData["UpdateMessage"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+        @if (TempData["AddMessage"] != null)
+        {
+            <div class="toast show text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>Success!</strong> @TempData["AddMessage"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="card p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle newTbl">
+                <thead class="table-dark">
+                    <tr>
+                        <th>News Title</th>
+                        <th>News Content</th>
+                        <th>Image</th>
+                        <th>Loading Date</th>
+                        <th>Link</th>
+                        <th>Meta Description</th>
+                        <th>Categories</th>
+                        <th class="text-center">Buttons</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var nws in Model)
+                    {
+                        <tr>
+                            <td>@nws.NewsTitle</td>
+                            <td>@nws.NewsDetail</td>
+                            <td>
+                                <img src="@nws.Image" alt="News Image" style="max-width: 100px; max-height: 100px;" />
+                            </td>
+
+                            <td>@nws.LoadingDate</td>
+                            <td><a href="@nws.Link" target="_blank" class="text-truncate" style="max-width: 150px; display: inline-block;">@nws.Link</a></td>
+                            <td>@nws.MetaDescription</td>
+                            <td>@nws.CategoryName</td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="/News/Update/@nws.NewsId" class="btn btn-sm btn-outline-success">
+                                        <i class="bx bx-edit-alt"></i> Update
+                                    </a>
+                                    <a href="javascript:void(0);" onclick="confirmDelete('@Url.Action("Delete", new { id = nws.NewsId })')" class="btn btn-sm btn-outline-danger">
+                                        <i class="bx bx-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center text-muted p-4">
+                               This news can't found.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    document.getElementById('clearFiltersBtn').addEventListener('click', function () {
+        document.getElementById('NewsTitle').value = '';
+        document.getElementById('LoadingDate').value = '';
+        document.getElementById('Link').value = '';
+        document.getElementById('MetaDescription').value = '';
+
+        this.closest('form').submit();
+    });
+
+    function confirmDelete(url) {
+        if (confirm('Are you sure?')) {
+            window.location.href = url;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl, {
+                autohide: true,
+                delay: 5000
+            })
+        })
+        toastList.forEach(toast => toast.show());
+    });
+</script>

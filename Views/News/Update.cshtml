@@ -1,0 +1,72 @@
+﻿@using News_Site.Models.Entity
+@using News_Site.Controllers
+@using News_Site.Models.ViewModel
+@model NewsUpdateViewModel
+@{
+    ViewData["Title"] = "Haber Güncelle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title">Update News</h2>
+        <a href="/News/Index" class="btn btn-outline-secondary">
+            <i class="bx bx-arrow-back me-2"></i>Back
+        </a>
+    </div>
+
+    @using (Html.BeginForm("ApplyUpdate", "News", FormMethod.Post, new { enctype = "multipart/form-data", @class = "card p-4" }))
+    {
+        @Html.HiddenFor(m => m.News.NewsId)
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="NewsTitle" class="form-label">News Title:</label>
+                @Html.TextBoxFor(m => m.News.NewsTitle, new { @class = "form-control newInput", placeholder = "News Title" })
+            </div>
+
+            <div class="col-md-6">
+                <label for="NewsDetail" class="form-label">News Detail:</label>
+                @Html.TextBoxFor(m => m.News.NewsDetail, new { @class = "form-control newInput", placeholder = "News Detail" })
+            </div>
+
+            <div class="col-md-6">
+                <label for="Image" class="form-label">Image:</label>
+                <input type="file" name="ImageFile" class="form-control newInput" />
+            </div>
+
+            <div class="col-md-6">
+                <label for="LoadingDate">Loading Date:</label>
+                @Html.TextBoxFor(m => m.News.LoadingDate, new { @class = "form-control newInput", placeholder="Loading date" })
+
+
+            </div>
+
+            <div class="col-md-6">
+                <label for="Link" class="form-label">Link:</label>
+                @Html.TextBoxFor(m => m.News.Link, new { @class = "form-control newInput", placeholder = "Link" })
+            </div>
+
+            <div class="col-md-6">
+                <label for="MetaDescription" class="form-label">Meta Description:</label>
+                @Html.TextBoxFor(m => m.News.MetaDescription, new { @class = "form-control newInput", placeholder = "Meta Description" })
+            </div>
+
+            <div class="col-md-6">
+                <label for="CategoryId" class="form-label">Categories:</label>
+                @Html.DropDownListFor(model => model.News.CategoryId,
+                         new SelectList(Model.Categories, "CategoryId", "CategoryName", Model.News.CategoryId),
+                         "-- Kategori Seçiniz --",
+                         new { @class = "form-select newInput" })
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-success newAddBtn">
+                    <i class="bx bx-refresh me-2"></i>Update
+                </button>
+            </div>
+        </div>
+    }
+</div>

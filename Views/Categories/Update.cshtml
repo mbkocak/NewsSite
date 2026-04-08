@@ -1,0 +1,42 @@
+﻿@using News_Site.Models.Entity
+@model News_Site.Models.Entity.Category
+
+@{
+    ViewData["Title"] = "Kategori Güncelle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title">Update Category</h2>
+        <a href="/Categories/Index" class="btn btn-outline-secondary">
+            <i class="bx bx-arrow-back me-2"></i>Back
+        </a>
+    </div>
+
+
+    @using (Html.BeginForm("ApplyUpdate", "Categories", FormMethod.Post, new { @class = "card p-4" }))
+    {
+        @Html.HiddenFor(m => m.CategoryId)
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="CategoryName" class="form-label">Category Name:</label>
+                @Html.TextBoxFor(m => m.CategoryName, new { @class = "form-control newInput", id = "CategoryName", placeholder = "Category Name" })
+            </div>
+
+            <div class="col-md-6">
+                <label for="CategoryDescription" class="form-label">Category Description:</label>
+                @Html.TextBoxFor(m => m.CategoryDescription, new { @class = "form-control newInput", id = "CategoryDescription", placeholder = "Category Description" })
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-success newAddBtn">
+                    <i class="bx bx-refresh me-2"></i>Update
+                </button>
+            </div>
+        </div>
+    }
+</div>

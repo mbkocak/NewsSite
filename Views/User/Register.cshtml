@@ -1,0 +1,35 @@
+﻿@using News_Site.Controllers
+@{
+    ViewData["Title"] = "Register";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register Form</title>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-box" id="login-form">
+            <form asp-action="Register" class="form-group" method="post">
+                <h1>Register</h1>
+                <input type="text" placeholder="User Name" id="UserName" name="UserName" required />
+                <input type="text" placeholder="User Surname" id="UserName" name="UserSurname" required />
+                <input type="password" name="password" placeholder="Password" required />
+                <input type="email" name="UserEmail" placeholder="User Email" required />
+                <button type="submit" name="register">Register</button>
+                <p>Already have account? <a href="/User/Login" onclick="showForm('login-form')">Login</a></p>
+
+            </form>
+        </div>
+        
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+

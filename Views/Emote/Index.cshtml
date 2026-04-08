@@ -1,0 +1,195 @@
+﻿@using News_Site.Controllers
+@model IEnumerable<News_Site.Models.Entity.Emote>
+
+@{
+    ViewData["Title"] = "İfadeler";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title">Emotes</h2>
+        <a href="/Emote/AddEmote/" class="btn btn-primary newAddBtn">
+            <i class="bx bx-plus me-2"></i>Add Emote
+        </a>
+    </div>
+
+    @using (Html.BeginForm("Index", "Emote", FormMethod.Post, new { @class = "card p-4 mb-4" }))
+    {
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="EmoteName" class="form-label">Emote Name:</label>
+                @Html.TextBox("EmoteName", null, new { @class = "form-control newInput", id = "EmoteName", placeholder = "Emote Name" })
+            </div>
+
+            <div class="col-md-6">
+                <label for="EmotePath" class="form-label">Emote Path:</label>
+                @Html.TextBox("EmotePath", null, new { @class = "form-control newInput", id = "EmotePath", placeholder = "Emote Path" })
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-dark newBtn">
+                    <i class="bx bx-search-alt-2 me-2"></i>Search
+                </button>
+                <button type="button" class="btn btn-dark newBtn" id="clearFiltersBtn">
+                    <i class="bx bx-x me-2"></i>Clear Filters
+                </button>
+            </div>
+        </div>
+    }
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        @if (TempData["DeleteMessage"] != null)
+        {
+            <div class="toast show text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>Success!</strong> @TempData["DeleteMessage"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+        @if (TempData["UpdateMessage"] != null)
+        {
+            <div class="toast show text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>Başarılı!</strong> @TempData["UpdateMessage"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+        @if (TempData["AddMessage"] != null)
+        {
+            <div class="toast show text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>Success!</strong> @TempData["AddMessage"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="card p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle newTbl">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Emote Name</th>
+                        <th>Emote</th>
+                        <th class="text-center">Buttons</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var emt in Model)
+                        {
+                            <tr>
+                                <td>@emt.EmoteName</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(emt.EmotePath))
+                                    {
+                                        <img src="@emt.EmotePath" alt="İfade" class="img-thumbnail" style="max-width: 40px; height: auto; object-fit: contain;" />
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">There is no image</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="/Emote/Update/@emt.EmoteId" class="btn btn-sm btn-outline-success">
+                                            <i class="bx bx-edit-alt"></i> Update
+                                        </a>
+                                        <a href="javascript:void(0);" onclick="confirmDelete('@Url.Action("Delete", new { id = emt.EmoteId })')" class="btn btn-sm btn-outline-danger">
+                                            <i class="bx bx-trash"></i> Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center text-muted p-4">
+                               This emote can't found.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    @if (TempData["DeleteMessage"] != null)
+    {
+        <div class="toast show text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <strong>Success!</strong> @TempData["DeleteMessage"]
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+    @if (TempData["UpdateMessage"] != null)
+    {
+        <div class="toast show text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <strong>Success!</strong> @TempData["UpdateMessage"]
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+    @if (TempData["AddMessage"] != null)
+    {
+        <div class="toast show text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <strong>Success!</strong> @TempData["AddMessage"]
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+
+     document.getElementById('clearFiltersBtn').addEventListener('click', function () {
+        document.getElementById('EmoteName').value = '';
+        document.getElementById('EmotePath').value = '';
+       
+        this.closest('form').submit();
+    });
+
+    function confirmDelete(url) {
+        if (confirm('Are you sure?')) {
+            window.location.href = url;
+        }
+    }
+
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl, {
+                autohide: true,
+                delay: 5000
+            })
+        })
+        toastList.forEach(toast => toast.show());
+    });
+</script>

@@ -1,0 +1,157 @@
+﻿@model News_Site.Models.ViewModel.NewsDetailViewModel
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>@Model.News.NewsTitle</h1>
+            <p><small>Yayın Tarihi: @Model.News.LoadingDate</small></p>
+            <img src="@Model.News.Image" alt="@Model.News.NewsTitle" class="img-fluid mb-3" />
+            <hr class="w-100 mx-auto mb-4" />
+            <div class="news-content px-3 py-2" style="margin-top:-20px;">
+                @Html.Raw(Model.News.NewsDetail?.Replace("\n", "<br /><br />"))
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <h5 class="mb-3">Diğer Haberler</h5>
+            <hr class="w-100 mx-auto mb-4" />
+            @foreach (var news in Model.SideNews.Take(7))
+            {
+                <div class="card mb-3 shadow-sm" style="height: 100px;">
+                    <div class="d-flex h-100">
+                        <a href="/News/Details/@news.Link" class="flex-shrink-0" style="width: 100px; height: 100px;">
+                            <img src="@news.Image"
+                                 class="img-fluid h-100 w-100"
+                                 style="object-fit: cover; border-top-left-radius: 0.375rem; border-bottom-left-radius: 0.375rem;" />
+                        </a>
+                        <div class="p-2 d-flex align-items-center">
+                            <a href="/News/Details/@news.Link" class="text-decoration-none text-dark">
+                                <h6 class="mb-0">@news.NewsTitle</h6>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+   
+    <hr class="w-100 mx-auto mb-4" />
+    <h2>Bu habere emoji ile tepki ver</h2>
+    <div class="reaction-wrapper mt-3">
+        @foreach (var emote in Model.Emotes)
+        {
+            var clickCount = 0;
+            if (Model.NewsEmoteCounts != null && Model.NewsEmoteCounts.ContainsKey(emote.EmoteId))
+            {
+                clickCount = Model.NewsEmoteCounts[emote.EmoteId];
+            }
+
+            <div class="reaction-item">
+                <img src="@emote.EmotePath"
+                     alt="@emote.EmoteName"
+                     title="@emote.EmoteName"
+                     onclick="sendEmote(@emote.EmoteId)" />
+                <small>@clickCount</small>
+            </div>
+        }
+    </div>
+
+    <hr class="w-100 mx-auto mb-4" />
+    <h4>Yorumlar</h4>
+    <form id="commentForm">
+        <input type="hidden" id="NewsId" value="@Model.News.NewsId" />
+        <textarea id="CommentContent" class="form-control" required></textarea>
+        <button type="submit" class="btn btn-primary mt-3">Yorum Ekle</button>
+    </form>
+
+    <hr class="w-100 mx-auto mb-4" />
+    <div id="commentList">
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="comment">
+                <p><strong>@comment.User?.UserName @comment.User?.UserSurname</strong></p>
+                <p>@comment.CommentContent</p>
+                <p><small>@comment.LoadingDate?.ToString("dd.MM.yyyy HH:mm")</small></p>
+            </div>
+        }
+    </div>
+</div>
+
+    
+
+    
+    
+<script>
+    function sendEmote(emoteId) {
+        const newsId = @Model.News.NewsId;
+
+        fetch('/News/Click', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                NewsId: newsId,
+                EmoteId: emoteId
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                response.text().then(text => alert(text));
+            }
+        })
+        .catch(() => alert("Bir hata oluştu. Tekrar deneyin."));
+    }
+
+    
+    document.getElementById("commentForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const newsId = document.getElementById("NewsId").value;
+        const commentContent = document.getElementById("CommentContent").value;
+
+        fetch('/News/AddCommentAjax', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                NewsId: newsId,
+                CommentContent: commentContent
+            })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Yorum gönderilemedi.");
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                const newComment = `
+                    <div class="comment">
+                        <p><strong>${data.userName} ${data.userSurname}</strong></p>
+                        <p>${data.content}</p>
+                        <p><small>${data.date}</small></p>
+                    </div>
+                `;
+
+                document.getElementById("commentList").insertAdjacentHTML("beforeend", newComment);
+                document.getElementById("CommentContent").value = ""; 
+            } else {
+                alert("Yorum eklenemedi.");
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Bir hata oluştu.");
+        });
+    });
+</script>

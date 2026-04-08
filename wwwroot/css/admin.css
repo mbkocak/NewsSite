@@ -1,0 +1,253 @@
+﻿
+body {
+     background-image: none !important; 
+    margin-top: 0 !important;
+    
+}
+
+.main-content {
+    margin-left: 80px; 
+    transition: margin-left .5s ease; 
+}
+
+.sidebar.active ~ .main-content {
+    margin-left: 240px; 
+}
+
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 100vh;
+    background: #212529;
+    padding: 6px 14px;
+    transition: .5s ease;
+    z-index: 1030;
+}
+
+    .sidebar.active {
+        width: 240px;
+    }
+
+    .sidebar .logo-content .logo {
+        display: flex;
+        align-items: center;
+        color: #fff;
+        height: 50px;
+        pointer-events: none;
+        opacity: 0;
+        transition: .3s ease;
+    }
+
+    .sidebar.active .logo-content .logo {
+        opacity: 1;
+        transition-delay: .2s;
+    }
+
+.logo-content .logo i {
+    font-size: 28px;
+    margin-right: 5px;
+}
+
+.logo-content .logo h3 {
+    font-size: 20px;
+}
+
+.sidebar #btn {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 20px;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+}
+
+.sidebar.active #btn {
+    left: 90%;
+}
+
+.sidebar ul {
+    margin-top: 20px;
+    list-style: none; 
+    padding-left: 0;
+}
+
+    .sidebar ul li {
+        position: relative;
+        width: 100%;
+        height: 50px;
+        margin: 5px 0;
+        line-height: 50px;
+    }
+
+        .sidebar ul li input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255,255, .1);
+            border-radius: 6px;
+            border: none;
+            outline: none;
+            padding-left: 50px;
+            font-size: 18px;
+            color: #fff;
+        }
+
+.sidebar.active ul li input {
+    padding: 0 20px 0 50px;
+}
+
+.sidebar ul li .bx-search {
+    position: absolute;
+    color: #fff;
+    font-size: 22px;
+    z-index: 99;
+}
+
+.sidebar ul li a {
+    display: flex;
+    color: #fff;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: .5s ease;
+    white-space: nowrap;
+}
+
+    .sidebar ul li a:hover {
+        background: rgba(255, 255, 255, .1);
+    }
+
+.sidebar ul .list-item.active a {
+    background: #327aff;
+}
+
+.sidebar ul li i {
+    min-width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+}
+
+.sidebar .links-name {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease;
+}
+
+.sidebar.active .links-name {
+    transition-delay: .2s;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+.sidebar .list-logout {
+    position: absolute;
+    bottom: 0;
+    margin: 15px 0;
+    width: 64%;
+}
+
+.sidebar.active .list-logout {
+    width: 89%;
+}
+
+
+.sidebar ul li a.active-link { 
+    background-color: #327aff; 
+}
+
+
+.card {
+    border-radius: 0.75rem !important; 
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; 
+}
+
+    .card:hover {
+        transform: translateY(-5px); 
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; 
+    }
+
+
+.page-title {
+    font-weight: 600;
+    color: #343a40; 
+}
+
+
+body {
+    background-color: #f4f7f6;
+}
+
+.page-title {
+    color: #343a40 !important;
+    font-size: 2.5rem;
+}
+
+.card {
+    transition: all 0.3s ease-in-out;
+    border-radius: 0.75rem !important;
+}
+
+.transform-on-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2) !important;
+}
+
+.text-info {
+    color: #17a2b8 !important;
+}
+
+.bg-dark {
+    background-color: #2c313a !important;
+}
+
+.h2.fw-bolder {
+    font-size: 2.75rem;
+}
+
+
+#categoryChart, #userTrendChart {
+    max-height: 250px;
+    width: 100%; 
+    height: 100%;
+}
+
+#roleDoughnutChart{
+    max-height: 300px;
+    width: 100%;
+    height: 100%;
+}
+
+.card.h-100 {
+    height: 100% !important;
+}
+
+
+.chart-section-spacing {
+    margin-top: 100px !important;
+    padding-top: 50px !important;
+}
+
+.newBtn2 {
+    background-color: #212529;
+    color: #f8f9fa; 
+    border: 1px solid #495057; 
+    transition: all 0.3s ease;
+}
+
+    .newBtn2:hover {
+        background-color: #17a2b8; 
+        color: #ffffff; 
+        border-color: #17a2b8;
+    }

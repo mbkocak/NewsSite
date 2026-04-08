@@ -1,0 +1,139 @@
+﻿   @using News_Site.Controllers
+@model IEnumerable<News_Site.Models.Entity.Category>
+
+@{
+    ViewData["Title"] = "Categories";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title">Categories</h2>
+        <a href="/Categories/AddCategory/" class="btn btn-primary newAddBtn">
+            <i class="bx bx-plus me-2"></i>Add Categories 
+        </a>
+    </div> 
+
+    @using (Html.BeginForm("Index", "Categories", FormMethod.Post, new { @class = "card p-4 mb-4" }))
+    {
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="CategoryName" class="form-label">Category Name:</label>
+                @Html.TextBox("CategoryName", null, new { @class = "form-control newInput", id = "CategoryName", placeholder = "Category Name" })
+            </div>
+
+            <div class="col-md-6">
+                <label for="CategoryDescription" class="form-label">Category Description:</label>
+                @Html.TextBox("CategoryDescription", null, new { @class = "form-control newInput", id = "CategoryDescription", placeholder = "Category Description" })
+            </div>
+        </div>
+
+        
+       <div class="row mt-3">
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-dark newBtn">
+                    <i class="bx bx-search-alt-2 me-2"></i>Search 
+                </button>
+                <button type="button" class="btn btn-dark newBtn" id="clearFiltersBtn">
+                   <i class="bx bx-x me-2"></i>Clear Filters 
+                </button>
+            </div>
+        </div>  
+    }
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        @if (TempData["DeleteMessage"] != null)
+        {
+            <div class="toast show text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>Success!</strong> @TempData["DeleteMessage"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+        @if (TempData["UpdateMessage"] != null)
+        {
+            <div class="toast show text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>Success!</strong> @TempData["UpdateMessage"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+        @if (TempData["AddMessage"] != null)
+        {
+            <div class="toast show text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>Success!</strong> @TempData["AddMessage"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+    </div>
+
+<div class="card p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle newTbl">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Category Name</th>
+                        <th>Category Description</th>
+                        <th class="text-center">Buttons</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var ctgrs in Model)
+                        {
+                            <tr>
+                                <td>@ctgrs.CategoryName</td>
+                                <td>@ctgrs.CategoryDescription</td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="/Categories/Update/@ctgrs.CategoryId" class="btn btn-sm btn-outline-success">
+                                            <i class="bx bx-edit-alt"></i> Update
+                                        </a>
+                                        <a href="javascript:void(0);" onclick="confirmDelete('@Url.Action("Delete", new { id = ctgrs.CategoryId })')" class="btn btn-sm btn-outline-danger">
+                                            <i class="bx bx-trash"></i> Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center text-muted p-4">
+                                This category can't found.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> 
+
+<script>
+
+     document.getElementById('clearFiltersBtn').addEventListener('click', function () {
+        document.getElementById('CategoryName').value = '';
+        document.getElementById('CategoryDescription').value = '';
+        
+        this.closest('form').submit();
+    });
+
+    function confirmDelete(url) {
+        if (confirm('Are you sure?')) {
+            window.location.href = url;
+        }
+    }
+</script>

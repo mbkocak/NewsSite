@@ -1,0 +1,168 @@
+﻿   @using News_Site.Controllers
+@model News_Site.Models.ViewModel.CommentsIndexViewModel
+
+@{
+    ViewData["Title"] = "Yorumlar";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title">Comments</h2>
+    </div>
+
+    @using (Html.BeginForm("Index", "Comments", FormMethod.Post, new { @class = "card p-4 mb-4" }))
+    {
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label for="NewsTitle" class="form-label">News Title:</label>
+                @Html.TextBoxFor(m => m.Filter.NewsTitle, new { @class = "form-control newInput", id = "NewsTitle", placeholder = "News Title" })
+            </div>
+            <div class="col-md-4">
+                <label for="NewsDetail" class="form-label">News Detail:</label>
+                @Html.TextBoxFor(m => m.Filter.NewsDetail, new { @class = "form-control newInput", id = "NewsDetail", placeholder = "News Detail" })
+            </div>
+            <div class="col-md-4">
+                <label for="LoadingDate" class="form-label">Loading Date:</label>
+                @Html.TextBoxFor(m => m.Filter.LoadingDate, "{0:yyyy-MM-dd}", new { @class = "form-control newInput", type = "date", id = "LoadingDate" })
+            </div>
+            <div class="col-md-4">
+                <label for="CommentContent" class="form-label">Comment Content:</label>
+                @Html.TextBoxFor(m => m.Filter.CommentContent, new { @class = "form-control newInput", id = "CommentContent", placeholder = "Comment Content" })
+            </div>
+            <div class="col-md-4">
+                <label for="UserName" class="form-label">User Name:</label>
+                @Html.TextBoxFor(m => m.Filter.UserName, new { @class = "form-control newInput", id = "UserName", placeholder = "User Name" })
+            </div>
+            <div class="col-md-4">
+                <label for="UserSurname" class="form-label">User Surname:</label>
+                @Html.TextBoxFor(m => m.Filter.UserSurname, new { @class = "form-control newInput", id = "UserSurname", placeholder = "User Surname" })
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-dark newBtn">
+                    <i class="bx bx-search-alt-2 me-2"></i>Search
+                </button>
+                <button type="button" class="btn btn-dark newBtn" id="clearFiltersBtn">
+                    <i class="bx bx-x me-2"></i>Clear Filters
+                </button>
+            </div>
+        </div>
+    }
+
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        @if (TempData["DeleteMessage"] != null)
+        {
+            <div class="toast show text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>Success!</strong> @TempData["DeleteMessage"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+    </div>
+        
+        
+
+    <div class="card p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle newTbl">
+                <thead class="table-dark">
+                    <tr>
+                        <th>News Title</th>
+                        <th>News Detail</th>
+                        <th>Image</th>
+                        <th>User Name</th>
+                        <th>User Surname</th>
+                        <th>Comment Content</th>
+                        <th>Loading Date</th>
+                        <th class="text-center">Buttons</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Comments != null && Model.Comments.Any())
+                    {
+                        @foreach (var cmmnts in Model.Comments)
+                        {
+                            <tr>
+                                <td>@cmmnts.NewsTitle</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(cmmnts.NewsDetail) && cmmnts.NewsDetail.Length > 50)
+                                    {
+                                        <span title="@cmmnts.NewsDetail">@cmmnts.NewsDetail.Substring(0, 50)...</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@cmmnts.NewsDetail</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(cmmnts.Image))
+                                    {
+                                        <img src="@cmmnts.Image" alt="Haber Görseli" class="img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;" />
+                                    }
+                                    else
+                                    {
+                                        <img src="/path/to/default/image.png" alt="Varsayılan Görsel" class="img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;" />
+                                    }
+                                </td>
+                                <td>@cmmnts.UserName</td>
+                                <td>@cmmnts.UserSurname</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(cmmnts.CommentContent) && cmmnts.CommentContent.Length > 50)
+                                    {
+                                        <span title="@cmmnts.CommentContent">@cmmnts.CommentContent.Substring(0, 50)...</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@cmmnts.CommentContent</span>
+                                    }
+                                </td>
+                                <td>
+                                    @(cmmnts.LoadingDate.HasValue ? cmmnts.LoadingDate.Value.ToString("yyyy-MM-dd") : "")
+                                </td>
+                                <td class="text-center">
+                                    <a href="javascript:void(0);" onclick="confirmDelete('@Url.Action("Delete", new { id = cmmnts.CommentId })')" class="btn btn-sm btn-outline-danger">
+                                        <i class="bx bx-trash"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center text-muted p-4">
+                                This comment not found.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    document.getElementById('clearFiltersBtn').addEventListener('click', function () {
+        document.getElementById('NewsTitle').value = '';
+        document.getElementById('NewsDetail').value = '';
+        document.getElementById('LoadingDate').value = '';
+        document.getElementById('CommentContent').value = '';
+        document.getElementById('UserName').value = '';
+        document.getElementById('UserSurname').value = '';
+
+        this.closest('form').submit();
+    });
+
+    function confirmDelete(url) {
+        if (confirm('Are you sure?')) {
+            window.location.href = url;
+        }
+    }
+</script>

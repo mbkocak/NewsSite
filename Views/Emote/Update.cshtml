@@ -1,0 +1,44 @@
+﻿@using News_Site.Models.Entity
+@using News_Site.Controllers
+@model News_Site.Models.Entity.Emote
+
+@{
+    ViewData["Title"] = "İfade Güncelle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title">Update Emote</h2>
+        <a href="/Emote/Index" class="btn btn-outline-secondary">
+            <i class="bx bx-arrow-back me-2"></i>Back
+        </a>
+    </div>
+
+    <div class="card p-4">
+        @using (Html.BeginForm("ApplyUpdate", "Emote", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(m => m.EmoteId)
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="EmoteName" class="form-label">Emote Name:</label>
+                    @Html.TextBoxFor(m => m.EmoteName, new { @class = "form-control newInput", id = "EmoteName", placeholder = "Emote Name" })
+                </div>
+
+                <div class="col-md-6">
+                    <label for="ImageFile" class="form-label">Emote Path:</label>
+                    <input type="file" name="ImageFile" class="form-control newInput" id="ImageFile" accept="image/*" />
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-success newAddBtn">
+                        <i class="bx bx-refresh me-2"></i>Update
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>

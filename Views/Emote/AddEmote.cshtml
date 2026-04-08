@@ -1,0 +1,69 @@
+﻿@using News_Site.Models.Entity
+@using News_Site.Controllers
+
+@{
+    ViewData["Title"] = "Yeni İfade Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title">Add New Emotes</h2>
+        <a href="/Emote/Index" class="btn btn-outline-secondary">
+            <i class="bx bx-arrow-back me-2"></i>Back
+        </a>
+    </div>
+
+    <div class="card p-4">
+        @using (Html.BeginForm("AddEmote", "Emote", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="EmoteName" class="form-label">Emote Name:</label>
+                    @Html.TextBox("EmoteName", null, new { @class = "form-control newInput", id = "EmoteName", placeholder = "Emote Name" })
+                </div>
+
+                <div class="col-md-6">
+                    <label for="ImageFile" class="form-label">Emote Path:</label>
+                    <input type="file" name="ImageFile" class="form-control newInput" id="ImageFile" accept="image/*" />
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-primary newAddBtn">
+                        <i class="bx bx-save me-2"></i>Add New Emote
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        @if (TempData["Alert Message"] != null)
+        {
+            <div class="toast show text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <strong>Success!</strong> @TempData["Alert Message"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl, {
+                autohide: true,
+                delay: 5000
+            })
+        })
+        toastList.forEach(toast => toast.show());
+    });
+</script>
